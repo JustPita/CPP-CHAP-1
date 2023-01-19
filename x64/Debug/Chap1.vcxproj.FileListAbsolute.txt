@@ -1,1 +1,2 @@
 C:\Users\snir\Documents\Prog\C++\Chap1\x64\Debug\Chap1.exe
+C:\Users\snir\Documents\Prog\C++\Chap1\CPP-CHAP-1\x64\Debug\Chap1.exe

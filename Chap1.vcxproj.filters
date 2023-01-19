@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CarreMagiqueDOrdreImpair.cpp">
+    <ClCompile Include="DM\DM 19_01_2023\GameOfTheLife.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
