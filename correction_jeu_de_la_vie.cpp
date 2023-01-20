@@ -1,8 +1,8 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 SARRITZU Peter
 On W10
-created :
-16/01/2023
+created : 
+20/01/2023|13:47
 </La programmation a du bon>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -25,21 +25,17 @@ Fonction getNombreCellulesVivantes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 int getNombreCellulesVivantes()
 {
-	int vivant = 0;
-	for (int i=0; i<DIM;i++) 
+	int i,j,vivant = 0;
+	for (i=0; i<DIM;i++) 
 	{
-		for (int j=0; i<DIM;j++)
+		for (j=0; i<DIM;j++)
 		{
-			if (cellule[i][j] == 1)
-			{
-				vivant++;
-			}
+			vivant += cellule[i][j];
 			
 		}
 	}
 	return vivant;
 }
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Fonction copie
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -51,17 +47,10 @@ void copie(bool sens)
 		{
 			for (int j = 0; i < DIM; j++)
 			{
-				save[i][j] = cellule[i][j];
-			}
-		}
-	}
-	else if (sens == false)
-	{
-		for (int i = 0; i < DIM; i++)
-		{
-			for (int j = 0; i < DIM; j++)
-			{
-				cellule[i][j] = save[i][j];
+				if (sens)
+                    save[i][j] = cellule[i][j];
+                else
+                    cellule[i][j] = save[i][j];
 			}
 		}
 	}
@@ -73,30 +62,20 @@ Fonction nombreVoisinsVivants
 int nombreVoisinsVivants(int i, int j)
 {
 	int nombreVoisins= 0;
-	j++;
-	i--;
-	for (int x = 0; x < 8; x++)
-	{
-		if (cellule[i][j] == 1 || cellule[i][j] == 0)
-		{
-			if (j < DIM && i> -1 && j > -1 && i < DIM)
-			{
-				if (cellule[i][j] == 1)
-					nombreVoisins++;
-			}
-		}
-		if (x < 2)
-			j--;
-		if (x < 4 && x >= 2)
-			i++;
-		if (x < 6 && x >= 4)
-			j++;
-		if (x == 6)
-			i--;
-	}
+	int imin=i-1 , imax=i+1 , jmin=j-1 , jmax=j+1;
+
+    if (imin<0) imin=0;
+    if (jmin<0) jmin=0;
+    if (imax >= DIM) imax=DIM-1;
+    if (jmax >= DIM) jmax=DIM-1;
+
+    nombreVoisins-=cellule[i][j];
+
+	for (i=imin;i<=imax;i++)
+        for (j=jmin; j<=jmax;j++)
+            nombreVoisins+=cellule[i][j];
 	return nombreVoisins;
 }
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Fonction etatSuivant
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -110,32 +89,14 @@ int etatSuivant()
 		for (int j = 0; i < DIM; j++)
 		{
 			tmp = nombreVoisinsVivants(i, j);
-			if (tmp == 3 && cellule[i][j] == 0)
-				save[i][j] = 1;
-			else if (tmp == 2 && tmp == 3 && cellule[i][j] == 1)
-				save[i][j] = 1;
-			else
-				save[i][j] = 0;
-		}
+			if (cellule[i][j]==0 && tmp==3) save[i][j]=1;
+            if (cellule[i][j]==1 && tmp<2) save[i][j]=0;
+            if (cellule[i][j]==1 && tmp>3) save[i][j]=0;
+        }
 	}
 
 	copie(false);
 	return getNombreCellulesVivantes();
-}
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Fonction affichage
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-void affichage()
-{
-	for (int i = 0; i < DIM; i++)
-	{
-		for (int j = 0; i < DIM; j++)
-		{
-			cout << cellule[i][j] <<"\t";
-
-		}
-		cout << endl;
-	}
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,15 +104,6 @@ Fonction Principale
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 int main()
 {
-
-	int n,i;
-	for (i=0;i<10;i++)
-	{
-		n=etatSuivant();
-
-		cout<<"\nGENERATION"<< i+1 << endl;
-		affichage();
-	}
 	cin.get(); cin.ignore();
 	return EXIT_SUCCESS;
 }
